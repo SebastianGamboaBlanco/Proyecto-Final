@@ -4,7 +4,7 @@ from sly import Parser
 #Creación de clase Analizador Lexico.
 
 class analizadorLexico(Lexer):
-    tokens = { CARACTER, NUMERO_ENTERO, NUMERO_FLOTANTE, CADENA, SI, SINO, LLAVE_IZQ, LLAVE_DER, IGUAL }
+    tokens = { CARACTER, NUMERO_ENTERO, NUMERO_FLOTANTE, CADENA, SI, SINO,PARA,EN, LLAVE_IZQ, LLAVE_DER, IGUAL }
     ignore = '\t '
     #ignore_comentario = r'\#.*'
     #ignore_nuevalinea = r'\n+'
@@ -17,6 +17,8 @@ class analizadorLexico(Lexer):
     IGUAL = r'=='
     LLAVE_IZQ = r'{{'
     LLAVE_DER = r'}}'
+    PARA = r'PARA'
+    EN = r'EN'
     CADENA = r'\".*?\"'
     CARACTER = r'[a-zA-Z_][a-zA-Z0-9_]*'
     #NUMERO_ENTERO = r'\d+'
@@ -25,7 +27,7 @@ class analizadorLexico(Lexer):
         Acciones con un método, y dar la expresión regular asociada con un @_()
     """
 
-    @_(r'\d+\.\d+')
+    @_(r'\d+.\d+')
     def NUMERO_FLOTANTE(self, token):
         token.value = float(token.value)
         return token
@@ -123,6 +125,10 @@ class analizadorParser(Parser):
     @_('NUMERO_FLOTANTE "+" NUMERO_ENTERO')
     def expresion(self, parser):
         return ('sumaFloat', parser.NUMERO_FLOTANTE0, parser.NUMERO_ENTERO1)
+    @_('PARA asignacion EN expresion LLAVE_IZQ declaracion LLAVE_DER')
+    def declaracion(self, parser):
+        return ('para', ('para-s', parser.asignacion, parser.expresion), parser.declaracion)
+        
     
 #Creacion de la clase ejecucion
 class Ejecucion:
@@ -131,10 +137,14 @@ class Ejecucion:
             resultado = self.r_arbol(arbol)
             if resultado is not None and isinstance(resultado, int):
                 print(resultado)
+            if resultado is not None and isinstance(resultado, float):
+                print(resultado)
             if isinstance(resultado, str) and resultado[0] == '"':
                 print(resultado)
     def r_arbol(self, node):
         if isinstance(node, int):
+            return node
+        if isinstance(node, float):
             return node
         if isinstance(node, str):
             return node
@@ -182,7 +192,21 @@ class Ejecucion:
             except LookupError:
                 print("Variable indefinida '"+node[1]+"' encontrada")
                 return 0
-
+        if node[0] == 'para':
+            if node[1][0] == 'para-s':
+                loop_setup = self.r_arbol(node[1])
+            
+                loop_count = self.env[loop_setup[0]]
+                loop_limit = loop_setup[1]
+            
+                for i in range(loop_count+1, loop_limit+1):
+                    res = self.r_arbol(node[2])
+                    if res is not None:
+                        print(res)
+                    self.env[loop_setup[0]] = i
+                    del self.env[loop_setup[0]]
+        if node[0] == 'para-s':
+            return (self.r_arbol(node[1]), self.r_arbol(node[2]))
 
 
 if __name__ == "__main__":
