@@ -4,7 +4,7 @@ from sly import Parser
 #Creación de clase Analizador Lexico.
 
 class analizadorLexico(Lexer):
-    tokens = { CARACTER, NUMERO_ENTERO, NUMERO_FLOTANTE, CADENA, SI, SINO,PARA,EN, LLAVE_IZQ, LLAVE_DER, IGUAL }
+    tokens = { CARACTER, NUMERO_ENTERO, NUMERO_FLOTANTE, CADENA, SI, SINO,PARA,EN, LLAVE_IZQ, LLAVE_DER, IGUAL, MIENTRAS }
     ignore = '\t '
     #ignore_comentario = r'\#.*'
     #ignore_nuevalinea = r'\n+'
@@ -18,6 +18,7 @@ class analizadorLexico(Lexer):
     LLAVE_IZQ = r'{{'
     LLAVE_DER = r'}}'
     PARA = r'PARA'
+    MIENTRAS = r'MIENTRAS'
     EN = r'EN'
     CADENA = r'\".*?\"'
     CARACTER = r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -128,6 +129,9 @@ class analizadorParser(Parser):
     @_('PARA asignacion EN expresion LLAVE_IZQ declaracion LLAVE_DER')
     def declaracion(self, parser):
         return ('para', ('para-s', parser.asignacion, parser.expresion), parser.declaracion)
+    @_('MIENTRAS condicion LLAVE_IZQ declaracion LLAVE_DER ')
+    def declaracion(self, parser):
+        return ('mientras',('mientras-s', parser.condicion),parser.declaracion)    
         
     
 #Creacion de la clase ejecucion
@@ -204,8 +208,24 @@ class Ejecucion:
                     if res is not None:
                         print(res)
                     self.env[loop_setup[0]] = i
-                    del self.env[loop_setup[0]]
+                del self.env[loop_setup[0]]
         if node[0] == 'para-s':
+            return (self.r_arbol(node[1]), self.r_arbol(node[2]))
+
+        if node[0] == 'mientras':
+            if node[1][0] == 'mientras-s':
+                loop_setup = self.r_arbol(node[1])
+            
+                loop_count = self.env[loop_setup[0]]
+                loop_limit = loop_setup[1]
+            
+                for i in range(loop_count+1, loop_limit+1):
+                    res = self.r_arbol(node[2])
+                    if res is not None:
+                        print(res)
+                    self.env[loop_setup[0]] = i
+                del self.env[loop_setup[0]]
+        if node[0] == 'mientras-s':
             return (self.r_arbol(node[1]), self.r_arbol(node[2]))
 
 
