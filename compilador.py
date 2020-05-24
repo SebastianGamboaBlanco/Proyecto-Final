@@ -1,13 +1,13 @@
 from sly import Lexer
 from sly import Parser
-
+from flask import Flask, make_response, jsonify
 #Creación de clase Analizador Lexico.
 
 class analizadorLexico(Lexer):
     tokens = { CARACTER, NUMERO_ENTERO, NUMERO_FLOTANTE, CADENA, SI, SINO,PARA,EN, LLAVE_IZQ, LLAVE_DER, IGUAL, MIENTRAS, MAYOR, MENOR, DIFERENTE }
     ignore = '\t '
-    #ignore_comentario = r'\#.*'
-    #ignore_nuevalinea = r'\n+'
+    ignore_comentario = r'\##.*'
+    ignore_nuevalinea = r'\n+'
     #Caracteres únicos que se devuelven tal cual.
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' }
 

@@ -2,12 +2,12 @@
 
 {% block content %}
 <div class="jumbotron">
-    <form>
+    <form action="/" method="POST" id="formulario">
         <div class="form-group">
-            <label for="exampleFormControlTextarea1">Entrada de codigo</label>
-            <textarea class="form-control " id="exampleFormControlTextarea1" rows="3" style="height: 500px;"></textarea>
+            <label for="entrada">Entrada de código</label>
+            <textarea class="form-control " id="entrada" name="texto" rows="3" style="height: 300px;" required></textarea>
         </div>
+        <button type="submit" class="btn btn-primary btn-lg">Correr</button>
     </form>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Correr</a>
 </div>
 {% endblock  %}

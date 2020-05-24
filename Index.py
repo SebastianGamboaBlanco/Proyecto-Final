@@ -1,10 +1,31 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, make_response, jsonify
+from compilador import *
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/', methods = ['POST', 'GET'])
+def compilador():
+    lexer = analizadorLexico()
+    parser = analizadorParser()
+    env = { }
+    while True:
+        try:
+            txt = request.form['texto']
+            "texto = input('Entrada: ')"
+        except EOFError:
+            break
+        '''if texto:
+            arbol = parser.parse(lexer.tokenize(texto))
+            Ejecucion(arbol, env)'''
+        if txt:
+            arbol = parser.parse(lexer.tokenize(txt))
+            aux = Ejecucion(arbol, env) 
+            return make_response(jsonify(aux.r_arbol(arbol)), 200) #Se muestra en consola.
 
 @app.route('/documentacion')
 def document():
