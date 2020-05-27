@@ -16,6 +16,7 @@ def compilador():
     while True:
         try:
             txt = request.form['texto']
+            txto = txt
             "texto = input('Entrada: ')"
         except EOFError:
             break
@@ -25,7 +26,9 @@ def compilador():
         if txt:
             arbol = parser.parse(lexer.tokenize(txt))
             aux = Ejecucion(arbol, env) 
-            return make_response(jsonify(aux.r_arbol(arbol)), 200) #Se muestra en consola.
+            if aux:
+                return make_response(jsonify(aux.r_arbol(arbol)), 200)
+
 
 @app.route('/documentacion')
 def document():

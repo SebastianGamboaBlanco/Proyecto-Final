@@ -23,3 +23,14 @@ footer {
   }
   
   .tm-footer-text-highlight:hover { color: #192b7e; }
+
+.jumbotron {
+  display: flex;
+}
+
+.div1 {
+  width: 50%;
+}
+.div2 {
+  width: 50%;
+}

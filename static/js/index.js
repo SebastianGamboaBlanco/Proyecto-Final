@@ -6,10 +6,18 @@ $('#formulario').on('submit', function (e) {
         data: $('form').serialize(),
         type: 'POST',
         success: function (texto) {
-            console.log(texto);
+            if(texto) {
+                document.getElementById('salida').innerHTML = texto;
+                document.getElementById('txt').innerHTML = 'Compilación éxitosa';
+                document.getElementById('txt').style.color="Aqua";
+            } else {
+                document.getElementById('salida').innerHTML = '';
+                document.getElementById('txt').innerHTML = 'Error de sintaxis';
+                document.getElementById('txt').style.color="red";
+            }
         },
-        error: function () {
-            console.log('Mal hecho');
+        error: function (texto) {
+            cdocument.getElementById('salida').innerHTML = 'Debe ingresar una expresión gramatical' + texto;
         }
     })
 });
