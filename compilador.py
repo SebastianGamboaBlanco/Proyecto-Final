@@ -7,7 +7,7 @@ class analizadorLexico(Lexer):
     tokens = { CARACTER, NUMERO_ENTERO, NUMERO_FLOTANTE, CADENA, SI, SINO,PARA,EN, LLAVE_IZQ, LLAVE_DER, IGUAL, MIENTRAS, MAYOR, MENOR, DIFERENTE }
     ignore = '\t '
     ignore_comentario = r'\##.*'
-    #ignore_nuevalinea = r'\n+'
+    ignore_nuevalinea = r'\n+'
     #Caracteres únicos que se devuelven tal cual.
     literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' }
 
@@ -60,9 +60,6 @@ class analizadorParser(Parser):
     precedence = (
         ('left', '+', '-'),
         ('left', '*', '/'),
-        ('left', 'CARACTER', 'IGUAL'),
-        ('left', 'SI', 'SINO'),
-        ('left', 'LLAVE_IZQ','LLAVE_DER'),
         ('right', 'UMINUS'),
         )
 
@@ -195,13 +192,13 @@ class Ejecucion:
         
         if node[0] == 'asignacion':
             self.env[node[1]] = self.r_arbol(node[2])
-            return self.env[node[1]]
+            return node[1]
         
         if node[0] == 'si':
             resultado = self.r_arbol(node[1])
             if resultado:    
                 self.r_arbol(node[2][1])
-            return self.r_arbol(node[2][0])
+            return self.r_arbol(node[2][1])
         
         if node[0] == 'sino':
             resultado = self.r_arbol(node[1])
