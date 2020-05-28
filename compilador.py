@@ -234,7 +234,7 @@ class Ejecucion:
                 for i in range(loop_count+1, loop_limit+1):
                     res = self.r_arbol(node[2])
                     if res is not None:
-                        print(res)
+                        return res
                     self.env[loop_setup[0]] = i
                 del self.env[loop_setup[0]]
         if node[0] == 'para-s':
@@ -248,7 +248,7 @@ class Ejecucion:
                 while(aux == resultado):    
                     self.r_arbol(node[2][1])
                     resultado = self.r_arbol(node[1])
-            return self.r_arbol(node[2][0])
+            return self.r_arbol(node[2][2])
 
 
 if __name__ == "__main__":
