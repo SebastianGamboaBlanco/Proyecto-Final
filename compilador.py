@@ -60,6 +60,9 @@ class analizadorParser(Parser):
     precedence = (
         ('left', '+', '-'),
         ('left', '*', '/'),
+        ('left', 'CARACTER', 'IGUAL'),
+        ('left', 'SI', 'SINO'),
+        ('left', 'LLAVE_IZQ','LLAVE_DER'),
         ('right', 'UMINUS'),
         )
 

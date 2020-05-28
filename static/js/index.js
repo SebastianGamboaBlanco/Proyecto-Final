@@ -9,7 +9,7 @@ $('#formulario').on('submit', function (e) {
             if(texto) {
                 document.getElementById('salida').innerHTML = texto;
                 document.getElementById('txt').innerHTML = 'Compilación éxitosa';
-                document.getElementById('txt').style.color="Aqua";
+                document.getElementById('txt').style.color="#001bff";
             } else {
                 document.getElementById('salida').innerHTML = '';
                 document.getElementById('txt').innerHTML = 'Error de sintaxis';

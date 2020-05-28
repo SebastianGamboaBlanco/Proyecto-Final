@@ -34,3 +34,13 @@ footer {
 .div2 {
   width: 50%;
 }
+.instrucciones {
+  background-color: white;
+  text-align: center;
+  font-size: 155%;
+}
+.contenido{
+  background-color: white;
+  text-align: left;
+  font-size: 100%;
+}
