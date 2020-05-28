@@ -1,2 +1,2 @@
 # Compilador 
-Funciona correctamente en consola, en página web molestan algunas gramaticas.
+Funciona correctamente en consola. En página web molestan algunas gramaticas. Ejecute compilador.py para consola o Index.py para web
